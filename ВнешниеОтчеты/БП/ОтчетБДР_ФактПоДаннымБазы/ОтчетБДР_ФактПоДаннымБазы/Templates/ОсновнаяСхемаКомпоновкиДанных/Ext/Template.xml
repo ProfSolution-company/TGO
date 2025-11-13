@@ -246,6 +246,27 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ВЫБРАТЬ
+	СУММА(-ХозрасчетныйОбороты.СуммаОборотДт) КАК Сумма,
+	ХозрасчетныйОбороты.Субконто2 КАК СтатьиЗатрат,
+	ХозрасчетныйОбороты.КорСчет КАК КорСчет,
+	ХозрасчетныйОбороты.Счет КАК Счет,
+	ХозрасчетныйОбороты.Субконто1 КАК НоменклатурнаяГруппа
+ПОМЕСТИТЬ Счет2305
+ИЗ
+	РегистрБухгалтерии.Хозрасчетный.Обороты(&amp;НачалоПериода, &amp;КонецПериода, , Счет В ИЕРАРХИИ (&amp;Счет), &amp;СубконтоСчет20, , КорСчет = ЗНАЧЕНИЕ(ПланСчетов.Хозрасчетный.ВыполнениеРемонтовОС), ) КАК ХозрасчетныйОбороты
+ГДЕ
+	ХозрасчетныйОбороты.Субконто1 В ИЕРАРХИИ(&amp;Проекты)
+	И НЕ ХозрасчетныйОбороты.Субконто1.ЭтоГруппа
+
+СГРУППИРОВАТЬ ПО
+	ХозрасчетныйОбороты.Субконто2,
+	ХозрасчетныйОбороты.КорСчет,
+	ХозрасчетныйОбороты.Счет,
+	ХозрасчетныйОбороты.Субконто1
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ВЫБРАТЬ
 	ХозрасчетныйОбороты.Счет КАК Счет,
 	ХозрасчетныйОбороты.Субконто1 КАК НоменлатурнаяГруппа,
 	СУММА(-ХозрасчетныйОбороты.СуммаОборотДт) КАК Сумма,
@@ -325,6 +346,14 @@
 ПОМЕСТИТЬ РасходыПоВидамДеятельности
 ИЗ
 	Счет20 КАК Счет20
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	Счет2305.Сумма
+ИЗ
+	Счет2305 КАК Счет2305
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -608,6 +637,17 @@
 	ОБЪЕДИНИТЬ ВСЕ
 	
 	ВЫБРАТЬ
+		Счет2305.НоменклатурнаяГруппа,
+		Счет2305.Сумма
+	ИЗ
+		Счет2305 КАК Счет2305
+	ГДЕ
+		(Счет2305.СтатьиЗатрат В ИЕРАРХИИ (&amp;Амортизация)
+				ИЛИ Счет2305.СтатьиЗатрат В ИЕРАРХИИ (&amp;Лизинг))
+	
+	ОБЪЕДИНИТЬ ВСЕ
+	
+	ВЫБРАТЬ
 		Счет25.НоменклатурнаяГруппа,
 		Счет25.Сумма
 	ИЗ
@@ -797,6 +837,21 @@
 	NULL
 ИЗ
 	Счет25 КАК Счет25
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	Счет2305.Сумма,
+	"2305счет",
+	Счет2305.КорСчет,
+	Счет2305.СтатьиЗатрат,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+ИЗ
+	Счет2305 КАК Счет2305
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -2221,6 +2276,128 @@
 							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
 						</dcscor:item>
 					</dcsset:outputParameters>
+				</dcsset:row>
+				<dcsset:row>
+					<dcsset:name>Показатель</dcsset:name>
+					<dcsset:groupItems>
+						<dcsset:item xsi:type="dcsset:GroupItemField">
+							<dcsset:field>Счет</dcsset:field>
+							<dcsset:groupType>Items</dcsset:groupType>
+							<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+							<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+							<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+						</dcsset:item>
+					</dcsset:groupItems>
+					<dcsset:filter>
+						<dcsset:item xsi:type="dcsset:FilterItemComparison">
+							<dcsset:left xsi:type="dcscor:Field">Раздел</dcsset:left>
+							<dcsset:comparisonType>Contains</dcsset:comparisonType>
+							<dcsset:right xsi:type="xs:string">2305счет</dcsset:right>
+						</dcsset:item>
+					</dcsset:filter>
+					<dcsset:order>
+						<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+					</dcsset:order>
+					<dcsset:selection>
+						<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+					</dcsset:selection>
+					<dcsset:conditionalAppearance>
+						<dcsset:item>
+							<dcsset:selection/>
+							<dcsset:filter/>
+							<dcsset:appearance>
+								<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+									<dcscor:parameter>ЦветФона</dcscor:parameter>
+									<dcscor:value xsi:type="v8ui:Color">#D2D2D2</dcscor:value>
+								</dcscor:item>
+							</dcsset:appearance>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:selection>
+								<dcsset:item>
+									<dcsset:field>Счет</dcsset:field>
+								</dcsset:item>
+							</dcsset:selection>
+							<dcsset:filter/>
+							<dcsset:appearance>
+								<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+									<dcscor:parameter>Текст</dcscor:parameter>
+									<dcscor:value xsi:type="v8:LocalStringType">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Выполнение ремонтов основных средств (счет 23.05)</v8:content>
+										</v8:item>
+									</dcscor:value>
+								</dcscor:item>
+							</dcsset:appearance>
+						</dcsset:item>
+					</dcsset:conditionalAppearance>
+					<dcsset:outputParameters>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>РасположениеОбщихИтогов</dcscor:parameter>
+							<dcscor:value xsi:type="dcscor:DataCompositionTotalPlacement">None</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ВыводитьЗаголовок</dcscor:parameter>
+							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ВыводитьОтбор</dcscor:parameter>
+							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
+						</dcscor:item>
+					</dcsset:outputParameters>
+					<dcsset:item>
+						<dcsset:name>Показатель</dcsset:name>
+						<dcsset:groupItems>
+							<dcsset:item xsi:type="dcsset:GroupItemField">
+								<dcsset:field>СтатьиЗатрат</dcsset:field>
+								<dcsset:groupType>Hierarchy</dcsset:groupType>
+								<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+								<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+								<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+							</dcsset:item>
+						</dcsset:groupItems>
+						<dcsset:order>
+							<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+						</dcsset:order>
+						<dcsset:selection>
+							<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+						</dcsset:selection>
+						<dcsset:conditionalAppearance>
+							<dcsset:item>
+								<dcsset:selection/>
+								<dcsset:filter>
+									<dcsset:item xsi:type="dcsset:FilterItemComparison">
+										<dcsset:left xsi:type="dcscor:Field">СистемныеПоля.УровеньВГруппировке</dcsset:left>
+										<dcsset:comparisonType>Equal</dcsset:comparisonType>
+										<dcsset:right xsi:type="xs:decimal">1</dcsset:right>
+									</dcsset:item>
+								</dcsset:filter>
+								<dcsset:appearance>
+									<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+										<dcscor:parameter>ЦветФона</dcscor:parameter>
+										<dcscor:value xsi:type="v8ui:Color">#DAEEF3</dcscor:value>
+									</dcscor:item>
+								</dcsset:appearance>
+							</dcsset:item>
+							<dcsset:item>
+								<dcsset:selection/>
+								<dcsset:filter>
+									<dcsset:item xsi:type="dcsset:FilterItemComparison">
+										<dcsset:left xsi:type="dcscor:Field">СистемныеПоля.УровеньВГруппировке</dcsset:left>
+										<dcsset:comparisonType>Equal</dcsset:comparisonType>
+										<dcsset:right xsi:type="xs:decimal">2</dcsset:right>
+									</dcsset:item>
+								</dcsset:filter>
+								<dcsset:appearance>
+									<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+										<dcscor:parameter>ЦветФона</dcscor:parameter>
+										<dcscor:value xsi:type="v8ui:Color">#F2F2F2</dcscor:value>
+									</dcscor:item>
+								</dcsset:appearance>
+							</dcsset:item>
+						</dcsset:conditionalAppearance>
+					</dcsset:item>
 				</dcsset:row>
 				<dcsset:row>
 					<dcsset:name>Показатель</dcsset:name>
