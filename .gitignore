@@ -1,0 +1,9 @@
+# Игнорируем файлы с расширением .cf, .cfe, .erf, .epf, .xls, .xlsx, .doc, .docx
+*.cf
+*.cfe
+*.erf
+*.epf
+*.xls
+*.xlsx
+*.doc
+*.docx
