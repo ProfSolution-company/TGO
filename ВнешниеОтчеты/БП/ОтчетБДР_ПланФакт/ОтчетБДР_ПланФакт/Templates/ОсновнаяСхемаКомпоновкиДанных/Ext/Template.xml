@@ -206,6 +206,27 @@
 	ПланБДРОбороты.Счет КАК Счет,
 	ПланБДРОбороты.НоменклатурнаяГруппа КАК НоменклатурнаяГруппа,
 	СУММА(ПланБДРОбороты.СуммаОборот) КАК Сумма
+ПОМЕСТИТЬ Счет2305
+ИЗ
+	РегистрНакопления.прПланБДР.Обороты(
+			&amp;НачалоПериода,
+			&amp;КонецПериода,
+			,
+			Счет = &amp;Счет2305
+				И Сценарий = &amp;Сценарий) КАК ПланБДРОбороты
+
+СГРУППИРОВАТЬ ПО
+	ПланБДРОбороты.НоменклатурнаяГруппа,
+	ПланБДРОбороты.Счет,
+	ПланБДРОбороты.СтатьяЗатрат
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ВЫБРАТЬ
+	ПланБДРОбороты.СтатьяЗатрат КАК СтатьяЗатрат,
+	ПланБДРОбороты.Счет КАК Счет,
+	ПланБДРОбороты.НоменклатурнаяГруппа КАК НоменклатурнаяГруппа,
+	СУММА(ПланБДРОбороты.СуммаОборот) КАК Сумма
 ПОМЕСТИТЬ Счет26
 ИЗ
 	РегистрНакопления.прПланБДР.Обороты(
@@ -283,6 +304,17 @@
 
 СГРУППИРОВАТЬ ПО
 	Счет25.НоменклатурнаяГруппа
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	СУММА(Счет2305.Сумма)
+ИЗ
+	Счет2305 КАК Счет2305
+
+СГРУППИРОВАТЬ ПО
+	Счет2305.НоменклатурнаяГруппа
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -556,6 +588,20 @@
 	ОБЪЕДИНИТЬ ВСЕ
 	
 	ВЫБРАТЬ
+		Счет2305.НоменклатурнаяГруппа,
+		СУММА(Счет2305.Сумма)
+	ИЗ
+		Счет2305 КАК Счет2305
+	ГДЕ
+		(Счет2305.СтатьяЗатрат В ИЕРАРХИИ (&amp;Амортизация)
+				ИЛИ Счет2305.СтатьяЗатрат В ИЕРАРХИИ (&amp;Лизинг))
+	
+	СГРУППИРОВАТЬ ПО
+		Счет2305.НоменклатурнаяГруппа
+	
+	ОБЪЕДИНИТЬ ВСЕ
+	
+	ВЫБРАТЬ
 		Счет26.НоменклатурнаяГруппа,
 		СУММА(Счет26.Сумма)
 	ИЗ
@@ -774,6 +820,21 @@
 	NULL
 ИЗ
 	Счет25 КАК Счет25
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	-Счет2305.Сумма,
+	"2305счет",
+	Счет2305.Счет,
+	Счет2305.СтатьяЗатрат,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+ИЗ
+	Счет2305 КАК Счет2305
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -1137,6 +1198,27 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ВЫБРАТЬ
+	СУММА(прПланБДРОбороты.СуммаОборот) КАК Сумма,
+	прПланБДРОбороты.СтатьяЗатрат КАК СтатьиЗатрат,
+	прПланБДРОбороты.Счет КАК Счет,
+	прПланБДРОбороты.НоменклатурнаяГруппа КАК НоменклатурнаяГруппа
+ПОМЕСТИТЬ Счет23052
+ИЗ
+	РегистрНакопления.прПланБДР.Обороты(
+			&amp;НачалоПериода,
+			&amp;КонецПериода,
+			,
+			Счет = &amp;Счет2305
+				И Сценарий = &amp;СценарийФакт) КАК прПланБДРОбороты
+
+СГРУППИРОВАТЬ ПО
+	прПланБДРОбороты.СтатьяЗатрат,
+	прПланБДРОбороты.Счет,
+	прПланБДРОбороты.НоменклатурнаяГруппа
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ВЫБРАТЬ
 	прПланБДРОбороты.Счет КАК Счет,
 	прПланБДРОбороты.НоменклатурнаяГруппа КАК НоменлатурнаяГруппа,
 	СУММА(прПланБДРОбороты.СуммаОборот) КАК Сумма,
@@ -1209,6 +1291,14 @@
 	Счет25.Сумма
 ИЗ
 	Счет252 КАК Счет25
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	Счет2305.Сумма
+ИЗ
+	Счет23052 КАК Счет2305
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -1486,6 +1576,17 @@
 	ОБЪЕДИНИТЬ ВСЕ
 	
 	ВЫБРАТЬ
+		Счет2305.НоменклатурнаяГруппа,
+		Счет2305.Сумма
+	ИЗ
+		Счет23052 КАК Счет2305
+	ГДЕ
+		(Счет2305.СтатьиЗатрат В ИЕРАРХИИ (&amp;Амортизация)
+				ИЛИ Счет2305.СтатьиЗатрат В ИЕРАРХИИ (&amp;Лизинг))
+	
+	ОБЪЕДИНИТЬ ВСЕ
+	
+	ВЫБРАТЬ
 		Счет25.НоменклатурнаяГруппа,
 		Счет25.Сумма
 	ИЗ
@@ -1661,6 +1762,21 @@
 	NULL
 ИЗ
 	Счет202 КАК Счет20
+
+ОБЪЕДИНИТЬ ВСЕ
+
+ВЫБРАТЬ
+	Счет2305.НоменклатурнаяГруппа,
+	-Счет2305.Сумма,
+	"2305счет",
+	Счет2305.Счет,
+	Счет2305.СтатьиЗатрат,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+ИЗ
+	Счет23052 КАК Счет2305
 
 ОБЪЕДИНИТЬ ВСЕ
 
@@ -2419,6 +2535,26 @@
 		<availableAsField>false</availableAsField>
 	</parameter>
 	<parameter>
+		<name>Счет2305</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Счет2305</v8:content>
+			</v8:item>
+		</title>
+		<valueType>
+			<v8:Type xmlns:d4p1="http://v8.1c.ru/8.1/data/enterprise/current-config">d4p1:ChartOfAccountsRef.Хозрасчетный</v8:Type>
+			<v8:Type>xs:string</v8:Type>
+			<v8:StringQualifiers>
+				<v8:Length>0</v8:Length>
+				<v8:AllowedLength>Variable</v8:AllowedLength>
+			</v8:StringQualifiers>
+		</valueType>
+		<value xsi:type="dcscor:DesignTimeValue">ПланСчетов.Хозрасчетный.ВыполнениеРемонтовОС</value>
+		<useRestriction>true</useRestriction>
+		<availableAsField>false</availableAsField>
+	</parameter>
+	<parameter>
 		<name>Счет9101</name>
 		<title xsi:type="v8:LocalStringType">
 			<v8:item>
@@ -3137,6 +3273,138 @@
 							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
 						</dcscor:item>
 					</dcsset:outputParameters>
+				</dcsset:row>
+				<dcsset:row>
+					<dcsset:name>Показатель</dcsset:name>
+					<dcsset:groupItems>
+						<dcsset:item xsi:type="dcsset:GroupItemField">
+							<dcsset:field>Счет</dcsset:field>
+							<dcsset:groupType>Items</dcsset:groupType>
+							<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+							<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+							<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+						</dcsset:item>
+					</dcsset:groupItems>
+					<dcsset:filter>
+						<dcsset:item xsi:type="dcsset:FilterItemComparison">
+							<dcsset:left xsi:type="dcscor:Field">Раздел</dcsset:left>
+							<dcsset:comparisonType>Contains</dcsset:comparisonType>
+							<dcsset:right xsi:type="xs:string">2305Счет</dcsset:right>
+						</dcsset:item>
+					</dcsset:filter>
+					<dcsset:order>
+						<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+					</dcsset:order>
+					<dcsset:selection>
+						<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+					</dcsset:selection>
+					<dcsset:conditionalAppearance>
+						<dcsset:item>
+							<dcsset:selection/>
+							<dcsset:filter/>
+							<dcsset:appearance>
+								<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+									<dcscor:parameter>ЦветФона</dcscor:parameter>
+									<dcscor:value xsi:type="v8ui:Color">#D2D2D2</dcscor:value>
+								</dcscor:item>
+							</dcsset:appearance>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:selection>
+								<dcsset:item>
+									<dcsset:field>Счет</dcsset:field>
+								</dcsset:item>
+							</dcsset:selection>
+							<dcsset:filter/>
+							<dcsset:appearance>
+								<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+									<dcscor:parameter>Текст</dcscor:parameter>
+									<dcscor:value xsi:type="v8:LocalStringType">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Выполнение ремонтов основных средств (счет 23.05)</v8:content>
+										</v8:item>
+									</dcscor:value>
+								</dcscor:item>
+							</dcsset:appearance>
+							<dcsset:presentation xsi:type="v8:LocalStringType">
+								<v8:item>
+									<v8:lang>en</v8:lang>
+									<v8:content>ыфвафываыфвафыва</v8:content>
+								</v8:item>
+							</dcsset:presentation>
+						</dcsset:item>
+					</dcsset:conditionalAppearance>
+					<dcsset:outputParameters>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>МакетОформления</dcscor:parameter>
+							<dcscor:value xsi:type="xs:string">Основной</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>РасположениеОбщихИтогов</dcscor:parameter>
+							<dcscor:value xsi:type="dcscor:DataCompositionTotalPlacement">None</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ВыводитьЗаголовок</dcscor:parameter>
+							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ВыводитьОтбор</dcscor:parameter>
+							<dcscor:value xsi:type="dcsset:DataCompositionTextOutputType">DontOutput</dcscor:value>
+						</dcscor:item>
+					</dcsset:outputParameters>
+					<dcsset:item>
+						<dcsset:name>Показатель</dcsset:name>
+						<dcsset:groupItems>
+							<dcsset:item xsi:type="dcsset:GroupItemField">
+								<dcsset:field>СтатьиЗатрат</dcsset:field>
+								<dcsset:groupType>Hierarchy</dcsset:groupType>
+								<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+								<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+								<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+							</dcsset:item>
+						</dcsset:groupItems>
+						<dcsset:order>
+							<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+						</dcsset:order>
+						<dcsset:selection>
+							<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+						</dcsset:selection>
+						<dcsset:conditionalAppearance>
+							<dcsset:item>
+								<dcsset:selection/>
+								<dcsset:filter>
+									<dcsset:item xsi:type="dcsset:FilterItemComparison">
+										<dcsset:left xsi:type="dcscor:Field">СистемныеПоля.УровеньВГруппировке</dcsset:left>
+										<dcsset:comparisonType>Equal</dcsset:comparisonType>
+										<dcsset:right xsi:type="xs:decimal">1</dcsset:right>
+									</dcsset:item>
+								</dcsset:filter>
+								<dcsset:appearance>
+									<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+										<dcscor:parameter>ЦветФона</dcscor:parameter>
+										<dcscor:value xsi:type="v8ui:Color">#DAEEF3</dcscor:value>
+									</dcscor:item>
+								</dcsset:appearance>
+							</dcsset:item>
+							<dcsset:item>
+								<dcsset:selection/>
+								<dcsset:filter>
+									<dcsset:item xsi:type="dcsset:FilterItemComparison">
+										<dcsset:left xsi:type="dcscor:Field">СистемныеПоля.УровеньВГруппировке</dcsset:left>
+										<dcsset:comparisonType>Equal</dcsset:comparisonType>
+										<dcsset:right xsi:type="xs:decimal">2</dcsset:right>
+									</dcsset:item>
+								</dcsset:filter>
+								<dcsset:appearance>
+									<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+										<dcscor:parameter>ЦветФона</dcscor:parameter>
+										<dcscor:value xsi:type="v8ui:Color">#F2F2F2</dcscor:value>
+									</dcscor:item>
+								</dcsset:appearance>
+							</dcsset:item>
+						</dcsset:conditionalAppearance>
+					</dcsset:item>
 				</dcsset:row>
 				<dcsset:row>
 					<dcsset:name>Показатель</dcsset:name>
